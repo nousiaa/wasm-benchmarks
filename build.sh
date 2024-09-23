@@ -1,0 +1,1 @@
+docker compose exec tests php /tools/build.php 

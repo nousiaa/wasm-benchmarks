@@ -1,0 +1,19 @@
+{
+    "tests": {
+        "polyBenchC": {
+            "outDir": "/tests/build",
+            "lib": "-I /tests/PolyBenchC/utilities /tests/PolyBenchC/utilities/polybench.c",
+            "base": "/tests/PolyBenchC"
+        }
+    },
+    "commands": {
+        "EMCC WASM": {
+            "ext": "wasm",
+            "base": "emcc --no-entry -sEXPORTED_FUNCTIONS=_wasm -sINITIAL_HEAP=128MB",
+            "genWat": true
+        }
+    },
+    "flags": {
+        "o1": "-O1"
+    }
+}

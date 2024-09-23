@@ -1,0 +1,21 @@
+services:
+  tests:
+    build:
+      context: .
+    volumes:
+      - ./results:/results
+      - ./tests:/tests
+      - ./tools:/tools
+    command: bash 
+    stdin_open: true
+    tty: true
+    network_mode: host
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  ui:
+   image: php:8.3-apache
+   ports:
+   - "7800:80"
+   volumes:
+    - ./view:/var/www/html
+    - ./results:/var/www/wasmdata

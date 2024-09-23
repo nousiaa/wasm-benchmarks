@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <script>
+      function getRun(id) {
+        $.getJSON("view.php?run=" + id, function (data) {
+          $("<h1/>", {
+            html: `${data.run.run_id} - ${data.run.created_at}`,
+          }).appendTo("#run");
+          $.each(data.results, function (test, testData) {
+            $.each(testData, function (flags, flagsData) {
+              const container = $("<div/>", {
+                style: "border: 1px solid; margin: 5px; padding: 2px",
+              });
+              let data = [];
+              $("<div/>", {
+                id: `${test}-${flags}`,
+              }).appendTo(container);
+              $.each(flagsData, function (runtime, runtimeData) {
+                data.push({
+                  x: runtimeData,
+                  type: "box",
+                  name: runtime,
+                });
+              });
+              $(
+                `<a/>`,
+                {
+                  href:`view.php?run=${id}&dl=${test}`,
+                  target:"_blank",
+                  style: "padding: 2px; background-color: green; color: white; text-decoration: none;"
+                }
+              ).append("Get TeX").appendTo(container);
+              container.appendTo("#run")
+
+              Plotly.newPlot(`${test}-${flags}`, data, {
+                title: `${test} (${flags})`,
+              });
+              
+            });
+          });
+        });
+      }
+      function showRun(id) {
+        $("#run").empty();
+        getRun(id);
+      }
+
+      function getList() {
+        $.getJSON("view.php", function (data) {
+          var items = [];
+          $.each(data, function (key, val) {
+            items.push(
+              `<a href='#' onclick="showRun('${val.id}')"><li>${val.created_at} / ${val.comment} (${val.id}) ${val.rows} rows</li></a>`
+            );
+          });
+          $("<ul/>", {
+            style: "padding-inline-start: 20px;",
+            html: items.join(""),
+          }).appendTo("#list");
+        });
+      }
+      getList();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("run")) {
+        showRun(urlParams.get("run"));
+      }
+    </script>
+  </head>
+  <body style="height: 95%;">
+    <div style="float: left; width: 25%; height: 100%; overflow-y: scroll; margin: 10px;">
+        <h1>Runs</h1>
+        <div id="list"></div>
+    </div>
+
+    <div id="run" style="float: right; width: 70%; height: 100%; overflow-y: scroll; margin: 10px;"></div>
+  </body>
+</html>

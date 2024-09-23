@@ -1,0 +1,29 @@
+{
+    "iterations": 1,
+    "testDir": "/tests/build",
+    "db": "sqlite:/results/results.db",
+    "runtimes": {
+        "native": ["", "o"],
+        "wasmtime" : ["/root/.wasmtime/bin/wasmtime --dir=/tests --invoke wasm", "wasm"],
+        "wasmer" : ["/root/.wasmer/bin/wasmer --dir=/tests --invoke wasm", "wasm"],
+        "node": ["node /tools/nodewrapper.js", "wasm"],
+        "vercel dev" : ["host.docker.internal:3000/api/", "curl"]
+    },
+    "disabledRuntimes": {
+        "wasm3" : ["/install/wasm3/wasm3 --dir=/tests --func wasm", "wasm"],
+        "wasmedge" : [["/root/.wasmedge/bin/wasmedge --dir=/tests", "wasm"], "wasm"],
+        "vercel prod" : ["<vercel deploy prod url>", "curl"]
+    },
+    "flags": [
+        "o1"
+    ],
+    "skip": [
+        "deriche",
+        "cholesky",
+        "lu",
+        "ludcmp",
+        "floyd-warshall",
+        "seidel-2d"
+    ],
+    "desc": ""
+}

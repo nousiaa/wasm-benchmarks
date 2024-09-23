@@ -1,0 +1,1 @@
+docker compose exec tests php /tools/run.php $1 $2

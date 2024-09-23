@@ -1,0 +1,8 @@
+*.wasm
+*.o
+*.wat
+results/results.db
+extra
+.vscode
+tools/runConfig.json
+tools/buildConfig.json
